@@ -1,0 +1,8 @@
+
+PHANTOMJS_EXECUTABLE=C:\Users\naaanazar\Desktop\parser\vendor\phantomjs\bin\phantomjs.exe
+
+C:\Users\naaanazar\Desktop\parser\vendor\casperjs\bin\casperjs.exe
+
+
+createScrenshot.js	
+casperjs createScrenshot.js http://example.com
