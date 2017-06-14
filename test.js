@@ -1,35 +1,37 @@
 //aliexpress
 
-var links = [];
-var results = [];
 var linkToGrubPage = null;
 var countPage =1;
 
 var utils = require('utils');
 var fs = require('fs');
 
+
 casper = require('casper').create({
     logLevel: "debug",              // Only "info" level messages will be logged
-    verbose: true,                  // log messages will be printed out to the console
+    //verbose: true,                  // log messages will be printed out to the console
     pageSettings: {
      //  loadImages:  false,        // do not load images
         loadPlugins: false         // do not load NPAPI plugins (Flash, Silverlight, ...)
     }
 });
 
-casper.start('https://www.aliexpress.com/wholesale?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20170614012629&SearchText=telephone&blanktest=0&tc=af', function() {
-
+casper.start(
+    'https://www.aliexpress.com/wholesale?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20170614012629&SearchText=pen&blanktest=0&tc=af',
+    function() {
 });
 
-
-
-    casper.then(grubPage);
+casper.then(grubPage);
 
 casper.run(function () {
+
     this.exit();
 });
 
 
+/**
+ * grub page and if exist next page run again
+ */
 function grubPage(){
     casper.echo('start');
     casper.echo(linkToGrubPage);
@@ -45,7 +47,6 @@ function grubPage(){
     });
 
     casper.then(function () {
-        casper.capture('screenshots/test2.png');
         var results = this.evaluate(getContentProducts);
 
         casper.then(function () {
@@ -59,7 +60,6 @@ function grubPage(){
             });
         });
 
-
         countPage++;
         casper.echo('------------------------------------END------------------------------------------');
 
@@ -70,25 +70,26 @@ function grubPage(){
         if(linkToGrubPage.length > 12) {
             casper.echo(linkToGrubPage);
 
-            casper.wait(5000, function() {
+            casper.wait(2500, function() {
                 casper.then(grubPage);
             });
         }
     });
 }
 
+/**
+ * get next page link
+ * @returns {string}
+ */
 function getNextPage(){
     return document.querySelector('.ui-pagination-active').nextElementSibling.getAttribute('href');
 }
 
-function getinfo() {
-    var links = document.querySelectorAll('div.info h3 a');
-    console.log(links);
-    return Array.prototype.map.call(links, function(e) {
-        return e.getAttribute('href');
-    });
-}
 
+/**
+ * parse page and get array with product objects in page
+ * @returns {*}
+ */
 function getContentProducts() {
     var el = document.querySelectorAll('li.list-item');
     elements =  Array.prototype.map.call(el, function(e) {
@@ -121,15 +122,6 @@ function getContentProducts() {
 
     return elements;
 }
-
-
-function getLinks() {
-    var links = document.querySelectorAll('div.info h3 a');
-    return Array.prototype.map.call(links, function(e) {
-        return e.getAttribute('href');
-    });
-}
-
 
 
 

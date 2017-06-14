@@ -20,3 +20,33 @@ var casper = require('casper').create({
     logLevel: "info",              // Only "info" level messages will be logged
     verbose: true                  // log messages will be printed out to the console
 });
+
+
+///////////////////////////////////////////////////////post//////////////////////////////////////////////////
+
+5
+down vote
+I just use the second case:
+
+First: get the info stored in a globalInfo variable
+
+var globalInfo;
+casper.thenOpen("www.targetpage.cl/valuableInfo", function() {
+    globalInfo = this.evaluate(function(){
+       var domInfo = {};
+       domInfo.title = "this is the info";
+       domInfo.body  = "scrap in the dom for info";
+       return domInfo;
+   });
+});
+Second: visit a page to store the captured data
+
+casper.then(function(){
+   casper.thenOpen("www.mipage.com/saveIntheDBonPost.php", {
+      method: 'post',
+      data:{              
+          'title': ''+globalInfo.title,
+          'body': ''+globalInfo.body
+      }
+   });
+});
