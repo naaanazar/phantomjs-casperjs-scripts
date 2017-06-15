@@ -19,11 +19,7 @@ casper = require('casper').create({
     }
 });
 
-casper.start(
-    'https://www.aliexpress.com/wholesale?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20170614012629&SearchText=pen&blanktest=0&tc=af',
-    function() {
-    });
-
+casper.start('https://www.aliexpress.com/wholesale?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20170614053251&SearchText=fg&blanktest=0&tc=af');
 
 /**
  * save logs to file
