@@ -2,6 +2,7 @@
 
 var linkToGrubPage = null;
 var countPage =1;
+var pageMassege = '';
 
 var utils = require('utils');
 var fs = require('fs');
@@ -15,8 +16,10 @@ casper = require('casper').create({
     }
 });
 
+var url = casper.cli.args[0];
+
 casper.start(
-    '',
+    url,
     function() {
 });
 casper.viewport(1920, 1080);
@@ -28,48 +31,42 @@ casper.then(function () {
 casper.then(function() {
     links = this.evaluate(getLinks);
     casper.each(links, function (self, link, i) {
-        casper.echo(i + '----' + link);
+        casper.echo(i + 'get----' + link);
 
-        casper.wait(10000, function() {
+        casper.wait(3000, function() {
 
             casper.then(function() {
                 casper.thenOpen('https:' + link, function () {
                 });
                 casper.then(function () {
                     casper.capture('results/bot/screenshots/step2/step2_' + i + '.png');
-                    casper.echo(i + '----' +'https:' + link);
+                  //  casper.echo(i + 'go to form----' +'https:' + link);
                 });
 
-               /* casper.then(function() {
-                 // Click on 1st result link
-                 this.click('aside.sidebar div div div a');
-                    casper.echo(i + '--*****************--' + 'CLICK');
-                 });*/
-
                 casper.then(function () {
-                    var pageMassege = this.evaluate(getPageMassege);
+                    pageMassege = this.evaluate(getPageMassege);
                     casper.thenOpen('https:' + pageMassege, function () {
-                        casper.echo(i + 'next--' +  pageMassege);
+                        casper.echo(i + ' --- go to form ---- ' +  pageMassege);
                     });
                 });
 
                 links = this.evaluate(getLinks);
 
                 casper.then(function () {
-                    casper.capture('results/bot/screenshots/step3/step3_' + i + '.png');
-                    casper.echo(i + '----' + 'step3');
+                    casper.capture('results/bot/screenshots/step3/step3_' + i + pageMassege + '.png');
+                    casper.echo('Send form: '+ this.getTitle());
                 });
 
-
-
                  casper.then(function () {
-                     this.fillSelectors('form#adreply_form', {
-                     'input[name="name"]':    'Nazar',
-                     'input[name="email"]':    'nazar.k.php@gmail.com',
-                     'input[name="phone"]':   '0299568959',
-                     'textarea[name="body"]':       'Good car',
-                     'input[name="cc"]':         1
-                     }, true);
+                     if (this.exists('form#adreply_form')) {
+                         this.fillSelectors('form#adreply_form', {
+                             'input[name="name"]': 'Nazar',
+                             'input[name="email"]': 'nazar.k.php@gmail.com',
+                             'input[name="phone"]': '0299568959',
+                             'textarea[name="body"]': 'Good car',
+                             'input[name="cc"]': 1
+                         }, true);
+                     }
                  });
 
 
@@ -82,11 +79,11 @@ casper.then(function() {
                  // Click on 1st result link
                  this.click('input[name="send"]');
                  });*/
-
+/*
                  casper.then(function () {
                     casper.capture('results/bot/screenshots/step4/step4_' + i + '.png');
                  });
-
+*/
             });
         });
 
