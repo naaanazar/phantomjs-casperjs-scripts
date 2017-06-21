@@ -14,8 +14,13 @@ sudo mv $PHANTOM_JS /usr/local/share
 sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
 phantomjs --version
 ```
-
-#####casper js notes
+#### install casperjs ubuntu
+```
+$ git clone git://github.com/casperjs/casperjs.git
+$ cd casperjs
+$ ln -sf `pwd`/bin/casperjs /usr/local/bin/casperjs
+```
+####casper js notes
 ######вернути об'єкт
 ```
 this.echo(casper.evaluate(function(myObject ) {
